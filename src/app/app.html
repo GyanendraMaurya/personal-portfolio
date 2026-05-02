@@ -1,0 +1,92 @@
+<header class="site-header">
+  <a class="brand" routerLink="/" (click)="closeMenu()" aria-label="Gyanendra Maurya home">
+    <span class="brand-mark">GM</span>
+    <span>
+      <strong>Gyanendra Maurya</strong>
+      <small>Full Stack Developer</small>
+    </span>
+  </a>
+
+  <nav class="desktop-nav" aria-label="Main navigation">
+    @for (item of navItems; track item.path) {
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+      >
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+
+  <div class="header-actions">
+    <button
+      class="theme-toggle"
+      type="button"
+      (click)="themeService.toggleTheme()"
+      [attr.aria-label]="'Switch to ' + (themeService.theme() === 'dark' ? 'light' : 'dark') + ' mode'"
+      [class.dark-active]="themeService.theme() === 'dark'"
+    >
+      <span class="theme-toggle-track" aria-hidden="true">
+        <span class="theme-toggle-icon sun">
+          <svg viewBox="0 0 24 24" role="img" focusable="false">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+        </span>
+        <span class="theme-toggle-icon moon">
+          <svg viewBox="0 0 24 24" role="img" focusable="false">
+            <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 7 7 0 1 0 20.5 14.5Z"></path>
+          </svg>
+        </span>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+
+    <button
+      class="menu-button"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+@if (menuOpen()) {
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    @for (item of navItems; track item.path) {
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+        (click)="closeMenu()"
+      >
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+}
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <div>
+    <p class="eyebrow">Available for focused product work</p>
+    <h2>Have a useful web product in mind?</h2>
+  </div>
+  <a class="button button-secondary" routerLink="/contact">Start a conversation</a>
+</footer>
