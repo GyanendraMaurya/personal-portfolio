@@ -353,16 +353,13 @@ main {
     var(--color-surface);
 }
 
-.portrait-mark {
+.portrait-photo {
   width: 120px;
   height: 120px;
-  display: grid;
-  place-items: center;
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  color: var(--color-accent);
-  font-size: 2rem;
-  font-weight: 900;
+  object-fit: cover;
+  object-position: center;
 }
 
 .prose-stack p {
