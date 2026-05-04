@@ -1,5 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
+
+import { ContactApiService } from '../services/contact-api.service';
 
 @Component({
   selector: 'app-contact-page',
@@ -18,7 +21,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
       <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
         @if (submitted()) {
           <div class="form-note" role="status">
-            Thanks. This form is ready; backend email delivery can be connected next.
+            Thanks. Your message has been sent.
+          </div>
+        }
+
+        @if (submitError()) {
+          <div class="form-note form-note-error" role="alert">
+            {{ submitError() }}
           </div>
         }
 
@@ -49,6 +58,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
           </select>
         </label>
 
+        <label class="contact-honeypot" aria-hidden="true">
+          <span>Website</span>
+          <input type="text" formControlName="website" autocomplete="off" tabindex="-1" />
+        </label>
+
         <label>
           <span>Message</span>
           <textarea rows="7" formControlName="message"></textarea>
@@ -57,7 +71,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
           }
         </label>
 
-        <button class="button button-primary" type="submit">Send message</button>
+        <button class="button button-primary" type="submit" [disabled]="isSending()">
+          {{ isSending() ? 'Sending...' : 'Send message' }}
+        </button>
       </form>
 
       <aside class="contact-aside">
@@ -82,17 +98,19 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class ContactPage {
   private readonly formBuilder = new FormBuilder();
+  private readonly contactApi = inject(ContactApiService);
   protected readonly submitted = signal(false);
   protected readonly attemptedSubmit = signal(false);
+  protected readonly isSending = signal(false);
+  protected readonly submitError = signal('');
 
-  protected readonly form = this.formBuilder.nonNullable.group({
+  protected readonly form = this.formBuilder.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     projectType: ['MVP build', Validators.required],
     message: ['', [Validators.required, Validators.minLength(20)]],
+    website: [''],
   });
-
-  protected readonly invalid = computed(() => this.form.invalid && this.attemptedSubmit());
 
   protected showError(field: keyof typeof this.form.controls): boolean {
     const control = this.form.controls[field];
@@ -102,19 +120,40 @@ export class ContactPage {
   protected submit(): void {
     this.attemptedSubmit.set(true);
     this.submitted.set(false);
+    this.submitError.set('');
 
-    if (this.form.invalid) {
+    if (this.form.invalid || this.isSending()) {
       this.form.markAllAsTouched();
       return;
     }
 
-    this.submitted.set(true);
-    this.form.reset({
-      name: '',
-      email: '',
-      projectType: 'MVP build',
-      message: '',
-    });
-    this.attemptedSubmit.set(false);
+    const formValue = this.form.getRawValue();
+    this.isSending.set(true);
+
+    this.contactApi
+      .submitContactMessage({
+        name: formValue.name ?? '',
+        email: formValue.email ?? '',
+        projectType: formValue.projectType ?? 'MVP build',
+        message: formValue.message ?? '',
+        website: formValue.website ?? '',
+      })
+      .pipe(finalize(() => this.isSending.set(false)))
+      .subscribe({
+        next: () => {
+          this.submitted.set(true);
+          this.form.reset({
+            name: '',
+            email: '',
+            projectType: 'MVP build',
+            message: '',
+            website: '',
+          });
+          this.attemptedSubmit.set(false);
+        },
+        error: () => {
+          this.submitError.set('Something went wrong while sending your message. Please try again.');
+        },
+      });
   }
 }

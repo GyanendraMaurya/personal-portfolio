@@ -10,6 +10,20 @@
       "url": "http://localhost:4200/"
     },
     {
+      "name": "Debug Vercel Backend",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["${workspaceFolder}/node_modules/vercel/dist/index.js", "dev", "--local"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env.local",
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
       "name": "ng test",
       "type": "chrome",
       "request": "launch",

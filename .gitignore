@@ -10,6 +10,16 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+yarn-debug.log
+pnpm-debug.log
+*.log
+.npm/
+.yarn/
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnpm-store/
 
 # IDEs and editors
 .idea/
@@ -33,11 +43,17 @@ yarn-error.log
 .sass-cache/
 /connect.lock
 /coverage
+.env*
+!.env.example
 /libpeerconnection.log
 testem.log
 /typings
 __screenshots__/
+.cache/
 
 # System files
 .DS_Store
 Thumbs.db
+
+# Hosting
+.vercel/
