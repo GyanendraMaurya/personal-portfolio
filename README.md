@@ -43,10 +43,10 @@ The contact form posts to the Vercel serverless function at `/api/contact`.
 For local verification, add your real values to `.env.local`, then run:
 
 ```bash
-vercel dev
+npm run dev:vercel
 ```
 
-Open the local URL printed by Vercel, usually `http://localhost:3000`, and submit the contact form. The `/api/contact` function will run locally with your `.env.local` values.
+Open the local URL printed by Vercel, usually `http://localhost:3000`, and submit the contact form. The script loads `.env.local` before starting Vercel, so the `/api/contact` function can read the same values that the VS Code backend debugger reads.
 
 Before deploying, create the Supabase table by running the SQL in `supabase/contact_messages.sql` inside the Supabase SQL editor. The table has row level security enabled and does not expose public insert policies because writes happen through the server-side service role key.
 
@@ -59,6 +59,8 @@ RESEND_API_KEY=re_your_resend_api_key
 RESEND_FROM_EMAIL=Portfolio <hello@yourdomain.com>
 CONTACT_EMAIL_TO=you@example.com
 ```
+
+Values in `.env.local` are local only and are not deployed to Vercel. Add the same keys in Vercel under Project Settings -> Environment Variables for Production, Preview, and Development as needed, then redeploy.
 
 For Resend, verify your sending domain when you are ready to use your own `RESEND_FROM_EMAIL`. The visitor's email is sent as the notification `replyTo`, so replying to the notification goes back to the sender.
 
