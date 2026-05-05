@@ -1,5 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { ContactApiService } from '../services/contact-api.service';
@@ -106,7 +112,7 @@ export class ContactPage {
 
   protected readonly form = this.formBuilder.group({
     name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, publicEmailDomainValidator]],
     projectType: ['MVP build', Validators.required],
     message: ['', [Validators.required, Validators.minLength(20)]],
     website: [''],
@@ -156,4 +162,16 @@ export class ContactPage {
         },
       });
   }
+}
+
+function publicEmailDomainValidator(control: AbstractControl): ValidationErrors | null {
+  const email = typeof control.value === 'string' ? control.value.trim() : '';
+
+  if (!email) {
+    return null;
+  }
+
+  return /^[^\s@]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/.test(email)
+    ? null
+    : { publicEmailDomain: true };
 }
