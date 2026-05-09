@@ -15,7 +15,15 @@ import { Component } from '@angular/core';
 
     <section class="page-section story-layout">
       <div class="portrait-card">
-        <img class="portrait-photo" src="/profile-photo.jpg" alt="Gyanendra Maurya" />
+        <img
+          class="portrait-photo"
+          src="/profile-photo.jpg"
+          alt="Gyanendra Maurya"
+          width="596"
+          height="596"
+          loading="lazy"
+          decoding="async"
+        />
         <p>Web developer with a practical product mindset.</p>
       </div>
       <div class="prose-stack">

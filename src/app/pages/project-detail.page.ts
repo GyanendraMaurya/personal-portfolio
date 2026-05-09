@@ -36,6 +36,13 @@ import { projects } from '../portfolio-data';
           </div>
         </aside>
       </section>
+    } @else {
+      <section class="page-hero page-section">
+        <a class="text-link" routerLink="/work">Back to work</a>
+        <p class="eyebrow">Project not found</p>
+        <h1>This project page is not available.</h1>
+        <p>Browse the selected work page for current case studies and product examples.</p>
+      </section>
     }
   `,
 })
@@ -44,6 +51,6 @@ export class ProjectDetailPage {
 
   protected readonly project = computed(() => {
     const slug = this.route.snapshot.paramMap.get('slug');
-    return projects.find((project) => project.slug === slug) ?? projects[0];
+    return projects.find((project) => project.slug === slug) ?? null;
   });
 }

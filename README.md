@@ -53,6 +53,7 @@ Before deploying, create the Supabase table by running the SQL in `supabase/cont
 Set these environment variables in Vercel Project Settings:
 
 ```bash
+SITE_URL=https://yourdomain.com
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 RESEND_API_KEY=re_your_resend_api_key

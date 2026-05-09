@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { SeoService } from './seo.service';
 import { ThemeService } from './theme.service';
 
 @Component({
@@ -9,6 +10,7 @@ import { ThemeService } from './theme.service';
   styleUrl: './app.css'
 })
 export class App {
+  private readonly seoService = inject(SeoService);
   protected readonly themeService = inject(ThemeService);
   protected readonly menuOpen = signal(false);
 
