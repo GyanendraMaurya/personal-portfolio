@@ -8,10 +8,20 @@ import { projects } from '../portfolio-data';
   template: `
     @if (project(); as project) {
       <section class="page-hero page-section">
-        <a class="text-link" routerLink="/work">Back to work</a>
+        <a class="text-link" routerLink="/work"><span aria-hidden="true">←</span> Back to work</a>
         <p class="eyebrow">{{ project.eyebrow }}</p>
         <h1>{{ project.title }}</h1>
         <p>{{ project.summary }}</p>
+        @if (project.note) {
+          <p class="project-note">{{ project.note }}</p>
+        }
+        @if (project.liveUrl) {
+          <div class="action-row">
+            <a class="button button-primary" [href]="project.liveUrl" target="_blank" rel="noopener noreferrer">
+              Visit live product
+            </a>
+          </div>
+        }
       </section>
 
       <section class="page-section detail-layout">
@@ -38,7 +48,7 @@ import { projects } from '../portfolio-data';
       </section>
     } @else {
       <section class="page-hero page-section">
-        <a class="text-link" routerLink="/work">Back to work</a>
+        <a class="text-link" routerLink="/work"><span aria-hidden="true">←</span> Back to work</a>
         <p class="eyebrow">Project not found</p>
         <h1>This project page is not available.</h1>
         <p>Browse the selected work page for current case studies and product examples.</p>

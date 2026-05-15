@@ -22,13 +22,30 @@ import { projects } from '../portfolio-data';
             <p class="eyebrow">{{ project.eyebrow }}</p>
             <h2>{{ project.title }}</h2>
             <p>{{ project.summary }}</p>
+            @if (project.note) {
+              <p class="project-note">{{ project.note }}</p>
+            }
           </div>
           <div class="tag-row">
             @for (item of project.stack.slice(0, 4); track item) {
               <span>{{ item }}</span>
             }
           </div>
-          <a [routerLink]="['/work', project.slug]">Open project</a>
+          <div class="action-row">
+            <a class="button button-secondary" [routerLink]="['/work', project.slug]">
+              {{ project.primaryCtaLabel ?? 'Read case study' }}
+            </a>
+            @if (project.liveUrl) {
+              <a
+                class="button button-primary"
+                [href]="project.liveUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit live product
+              </a>
+            }
+          </div>
         </article>
       }
     </section>

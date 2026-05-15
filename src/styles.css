@@ -180,6 +180,7 @@ main {
 
 .text-link {
   display: inline-flex;
+  gap: 0.4rem;
   margin-bottom: var(--space-4);
   color: var(--color-accent);
   font-weight: 800;
@@ -321,6 +322,10 @@ main {
   font-weight: 900;
 }
 
+.project-card a.button-primary {
+  color: var(--color-bg);
+}
+
 .card-grid,
 .skills-grid,
 .project-list {
@@ -347,6 +352,13 @@ main {
 .project-card {
   display: grid;
   gap: var(--space-4);
+}
+
+.project-note {
+  margin-top: var(--space-3);
+  color: var(--color-warm);
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 .portrait-card {
