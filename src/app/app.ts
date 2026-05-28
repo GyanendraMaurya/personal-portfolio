@@ -1,5 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { filter, map } from 'rxjs';
 import { SeoService } from './seo.service';
 import { ThemeService } from './theme.service';
 
@@ -11,8 +13,18 @@ import { ThemeService } from './theme.service';
 })
 export class App {
   private readonly seoService = inject(SeoService);
+  private readonly router = inject(Router);
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
   protected readonly themeService = inject(ThemeService);
   protected readonly menuOpen = signal(false);
+  protected readonly isContactPage = computed(() => this.currentPath(this.currentUrl()) === '/contact');
 
   protected readonly navItems = [
     { label: 'Home', path: '/' },
@@ -30,5 +42,9 @@ export class App {
 
   protected toggleMenu(): void {
     this.menuOpen.update((open) => !open);
+  }
+
+  private currentPath(url: string): string {
+    return url.split(/[?#]/, 1)[0].replace(/\/$/, '') || '/';
   }
 }

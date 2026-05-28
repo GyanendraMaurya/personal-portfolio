@@ -422,6 +422,7 @@ main {
   background: var(--color-bg);
   color: var(--color-text);
   outline: none;
+  resize: vertical;
   transition:
     border-color var(--motion-fast),
     box-shadow var(--motion-fast);

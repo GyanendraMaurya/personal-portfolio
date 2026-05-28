@@ -1,12 +1,20 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
+
+@Component({
+  standalone: false,
+  template: '',
+})
+class TestPage {}
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],
+      declarations: [TestPage],
+      providers: [provideRouter([{ path: 'contact', component: TestPage }])],
     }).compileComponents();
   });
 
@@ -21,5 +29,16 @@ describe('App', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.brand')?.textContent).toContain('Gyanendra Maurya');
+  });
+
+  it('should hide the footer on the contact page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/contact');
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.site-footer')).toBeNull();
   });
 });

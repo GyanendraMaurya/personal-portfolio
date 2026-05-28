@@ -85,10 +85,12 @@
   <router-outlet />
 </main>
 
-<footer class="site-footer">
-  <div>
-    <p class="eyebrow">Available for focused product work</p>
-    <h2>Have a useful web product in mind?</h2>
-  </div>
-  <a class="button button-secondary" routerLink="/contact">Start a conversation</a>
-</footer>
+@if (!isContactPage()) {
+  <footer class="site-footer">
+    <div>
+      <p class="eyebrow">Available for focused product work</p>
+      <h2>Have a useful web product in mind?</h2>
+    </div>
+    <a class="button button-secondary" routerLink="/contact">Start a conversation</a>
+  </footer>
+}
